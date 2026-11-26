@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-F0ZLS15LNQ"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-F0ZLS15LNQ');
+    document.addEventListener('click', function(e) {
+      var el = e.target && e.target.closest ? e.target.closest('a, button') : null;
+      if (!el || typeof gtag !== 'function') return;
+      var label = (el.textContent || '').trim().slice(0, 60);
+      var href = el.getAttribute('href') || '';
+      if (el.id || (href && href.indexOf('http') === 0)) {
+        gtag('event', 'cta_engagement', {
+          element_id: el.id || 'link',
+          element_text: label,
+          link_url: href,
+          page_path: location.pathname
+        });
+      }
+    });
+  </script>
+  <title>Japan Resort Zoning &amp; Yield | 180-Day Minpaku vs 365-Day Ryokan</title>
+  <meta
+    name="description"
+    content="Compare 180-day Minpaku ordinances and 365-day Ryokan-gyo (Simple Lodging) net yields across 20 Japanese ski, onsen, urban, island, and heritage markets."
+  />
+  <link rel="canonical" href="https://chaochenxuanhua-boop.github.io/japan-resort-minpaku-map/" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Noto+Sans+JP:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap"
+    rel="stylesheet"
+  />
+  <link rel="stylesheet" href="./style.css" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Can foreigners legally buy property and run a 365-day Airbnb in Japan?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. Foreigners face zero nationality restrictions when buying freehold real estate in Japan. To operate short-term rentals 365 days per year instead of the 180-day Minpaku cap, the parcel must qualify for a Hotel and Ryokan Business Act Simple Lodging (Kan'i Shukusho) license from the local Public Health Center."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Why do many Japanese resort and urban markets allow fewer than 180 days under Minpaku?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Article 18 of Japan's Private Lodging Business Act empowers prefectures and municipalities to restrict operating seasons and weekdays. Examples include Nagano banning May and July-September statewide, Kyoto residential zones limiting operation to ~60 winter days, and Shibuya/Shinjuku/Taito restricting weekday residential stays."
+        }
+      }
+    ]
+  }
+  </script>
+</head>
+<body>
+  <!-- PURE WHITE MINIMAL NAVBAR -->
+  <header class="site-navbar">
+    <div class="container navbar-inner">
+      <a href="#explorer" class="brand-mark">Japan Resort STR Atlas</a>
+      <nav class="top-nav" aria-label="Primary sections">
+        <a href="#explorer" class="nav-link">Zoning Explorer</a>
+        <a href="#simulator" class="nav-link">Yield Calculator</a>
+        <a href="#zoning-desk" class="nav-link nav-cta">Zoning Check</a>
+      </nav>
+      <div class="fx-control">
+        <label for="globalFxInput">USD/JPY</label>
+        <input
+          type="number"
+          id="globalFxInput"
+          min="80"
+          max="250"
+          step="0.5"
+          value="152.0"
+          aria-label="USD to JPY exchange rate"
+        />
+      </div>
+    </div>
+  </header>
+
+  <main class="container main-content">
+    <!-- SECTION 1: IMMEDIATE ABOVE-THE-FOLD EXPLORER -->
+    <section id="explorer" class="section-block">
+      <div class="hero-compact">
+        <div>
+          <h1>Japan Resort Zoning &amp; Yield</h1>
+          <p class="page-lead">
+            Compare 180-day Minpaku limits and 365-day Ryokan licenses across 20 resort markets.
+          </p>
+        </div>
+        <div class="view-toggle" role="group" aria-label="Explorer layout mode">
+          <button type="button" id="btnViewGrid" class="toggle-btn active">Cards</button>
+          <button type="button" id="btnViewTable" class="toggle-btn">Table</button>
+        </div>
+      </div>
+
+      <div class="filter-panel">
+        <div class="filter-row">
+          <div class="filter-field filter-search">
+            <label for="searchInput">Search resort, kanji, or rule</label>
+            <input
+              type="search"
+              id="searchInput"
+              value=""
+              autocomplete="off"
+              aria-describedby="searchHint"
+            />
+            <span id="searchHint" class="field-hint">e.g. Hakuba, Niseko, Okinawa, machiya, Jikaho, HOA</span>
+          </div>
+
+          <div class="filter-field">
+            <label for="categorySelect">Category</label>
+            <select id="categorySelect">
+              <option value="ALL">All Categories (20)</option>
+              <option value="Ski &amp; Alpine">Ski &amp; Alpine</option>
+              <option value="Onsen &amp; Mountain">Onsen &amp; Mountain</option>
+              <option value="Urban &amp; Metro">Urban &amp; Metro</option>
+              <option value="Coastal &amp; Island">Coastal &amp; Island</option>
+              <option value="Heritage">Heritage</option>
+            </select>
+          </div>
+
+          <div class="filter-field">
+            <label for="severitySelect">Minpaku Rule</label>
+            <select id="severitySelect">
+              <option value="ALL">All Severities</option>
+              <option value="Green: Standard 180d">Green: Standard 180d</option>
+              <option value="Amber: Zone/Season Restricted">Amber: Zone/Season Restricted</option>
+              <option value="Red: Strict Weekday/School-Zone Ban">Red: Strict Weekday/School-Zone Ban</option>
+            </select>
+          </div>
+
+          <div class="filter-field">
+            <label for="feasibilitySelect">365d License</label>
+            <select id="feasibilitySelect">
+              <option value="ALL">All Tiers</option>
+              <option value="High - Investor Friendly">High - Investor Friendly</option>
+              <option value="Moderate - Zoning Dependent">Moderate - Zoning Dependent</option>
+              <option value="Strict - High Barrier">Strict - High Barrier</option>
+            </select>
+          </div>
+
+          <div class="filter-field">
+            <label for="prefectureSelect">Prefecture</label>
+            <select id="prefectureSelect">
+              <option value="ALL">All Prefectures</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="filter-status-bar">
+          <span id="filterCountLabel">Showing <strong>20</strong> of 20 resort markets</span>
+          <button type="button" id="btnResetFilters" class="btn-link">Reset filters</button>
+        </div>
+      </div>
+
+      <div id="explorerGrid" class="resort-grid" aria-live="polite"></div>
+
+      <div id="explorerTableWrap" class="table-wrap hidden">
+        <table class="matrix-table">
+          <thead>
+            <tr>
+              <th>Resort</th>
+              <th>Prefecture</th>
+              <th>Category</th>
+              <th>Minpaku Severity</th>
+              <th>Effective Cap</th>
+              <th>365d Viability</th>
+              <th>Peak ADR</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="explorerTableBody"></tbody>
+        </table>
+      </div>
+
+      <!-- SECONDARY BENCHMARK & STATUTORY NOTES DEMOTED BELOW TOOL -->
+      <details class="statutory-disclosure">
+        <summary>
+          <span>Dataset coverage: <strong id="kpiTotalResorts">20</strong> markets &bull; Mean effective Minpaku cap: <strong id="kpiAvgMinpakuDays">140.9 days/yr</strong> vs 365-day Ryokan-gyo</span>
+          <span class="disclosure-hint">How 180d vs 365d licensing works</span>
+        </summary>
+        <div class="disclosure-grid">
+          <div>
+            <h3>180-Day Minpaku (住宅宿泊事業法)</h3>
+            <p>
+              National registration caps unhosted stays at 180 nights/year, and Prefectural or Municipal Article 18 ordinances often reduce usable days to 60–115 nights via summer blackouts or weekday bans.
+            </p>
+          </div>
+          <div>
+            <h3>365-Day Simple Lodging (旅館業法・簡易宿所)</h3>
+            <p>
+              A Public Health Center (<em>Hokenjo</em>) commercial permit unlocks 365-day operation when parcel zoning, commercial fire alarms (<em>Jikah&#333;</em>), and check-in rules (&lt;200 sqm building threshold) are met.
+            </p>
+          </div>
+        </div>
+      </details>
+    </section>
+
+    <!-- SECTION 2: 180D VS 365D YIELD CALCULATOR -->
+    <section id="simulator" class="section-block">
+      <div class="section-header">
+        <h2>180-Day vs 365-Day Net Yield Calculator</h2>
+        <p class="section-desc">
+          Estimate net cash-on-cash yield and fire-alarm licensing payback in JPY and USD.
+        </p>
+      </div>
+
+      <div class="calc-layout">
+        <form id="yieldForm" class="surface-card" onsubmit="return false;">
+          <div class="preset-banner">
+            <label for="calcResortPreset">Resort Market Preset</label>
+            <select id="calcResortPreset"></select>
+            <p id="calcOrdinanceCallout" class="preset-callout"></p>
+          </div>
+
+          <h3 class="form-group-title">Acquisition &amp; Licensing CapEx</h3>
+          <div class="input-grid-2">
+            <div class="input-field">
+              <label for="inpPriceJpy">Property Price (&yen;)</label>
+              <input type="number" id="inpPriceJpy" min="5000000" max="2000000000" step="1000000" value="85000000" />
+              <span class="field-sub" id="subPriceUsd"></span>
+            </div>
+            <div class="input-field">
+              <label for="inpClosingPct">Closing Costs (%)</label>
+              <input type="number" id="inpClosingPct" min="0" max="15" step="0.5" value="7.0" />
+              <span class="field-sub">Tax, registration, broker (~7%)</span>
+            </div>
+            <div class="input-field">
+              <label for="inpRenoJpy">Base Renovation (&yen;)</label>
+              <input type="number" id="inpRenoJpy" min="0" max="500000000" step="500000" value="8000000" />
+              <span class="field-sub" id="subRenoUsd"></span>
+            </div>
+            <div class="input-field highlight-input">
+              <label for="inpFireUpgradeJpy">365d Fire &amp; Permit CapEx (&yen;)</label>
+              <input type="number" id="inpFireUpgradeJpy" min="300000" max="50000000" step="100000" value="3200000" />
+              <span class="field-sub" id="subFireUsd"></span>
+            </div>
+          </div>
+
+          <h3 class="form-group-title">Seasonality, ADR &amp; Expenses</h3>
+          <div class="input-grid-2">
+            <div class="input-field">
+              <label for="inpPeakAdrJpy">Peak ADR (&yen;/night)</label>
+              <input type="number" id="inpPeakAdrJpy" min="5000" max="1000000" step="1000" value="78000" />
+              <span class="field-sub" id="subPeakAdrUsd"></span>
+            </div>
+            <div class="input-field">
+              <label for="inpOffpeakAdrJpy">Off-Peak ADR (&yen;/night)</label>
+              <input type="number" id="inpOffpeakAdrJpy" min="3000" max="500000" step="1000" value="32000" />
+              <span class="field-sub" id="subOffpeakAdrUsd"></span>
+            </div>
+            <div class="input-field">
+              <label for="inpPeakMonths">Peak Season (Months/Yr)</label>
+              <input type="number" id="inpPeakMonths" min="1" max="11" step="1" value="4" />
+              <span class="field-sub">Remaining months at off-peak ADR</span>
+            </div>
+            <div class="input-field">
+              <label for="inpMinpakuCapDays">Local Minpaku Cap (Days)</label>
+              <input type="number" id="inpMinpakuCapDays" min="10" max="180" step="1" value="105" />
+              <span class="field-sub">180d max minus local bans</span>
+            </div>
+            <div class="input-field">
+              <label for="inpPeakOccPct">Peak Occupancy (%)</label>
+              <input type="number" id="inpPeakOccPct" min="10" max="98" step="1" value="82" />
+            </div>
+            <div class="input-field">
+              <label for="inpOffpeakOccPct">Off-Peak Occupancy (%)</label>
+              <input type="number" id="inpOffpeakOccPct" min="5" max="95" step="1" value="42" />
+            </div>
+            <div class="input-field">
+              <label for="inpMgmtFeePct">Management &amp; OTA Fee (%)</label>
+              <input type="number" id="inpMgmtFeePct" min="5" max="45" step="1" value="22" />
+              <span class="field-sub">Full-service bilingual operator</span>
+            </div>
+            <div class="input-field">
+              <label for="inpFixedOpexJpy">Annual Fixed OpEx (&yen;/yr)</label>
+              <input type="number" id="inpFixedOpexJpy" min="100000" max="30000000" step="50000" value="1650000" />
+              <span class="field-sub">Utilities, snow/onsen, property tax</span>
+            </div>
+          </div>
+        </form>
+
+        <div class="surface-card">
+          <div class="alpha-summary" id="alphaBanner">
+            <div class="alpha-metric">
+              <span class="alpha-label">365d Annual NOI Gain</span>
+              <strong class="alpha-value" id="resNoiDeltaJpy">+&yen;0</strong>
+              <span class="alpha-sub" id="resNoiDeltaUsd">+$0 / yr</span>
+            </div>
+            <div class="alpha-metric">
+              <span class="alpha-label">Net Cash Yield Shift</span>
+              <strong class="alpha-value" id="resYieldLift">0.0% &rarr; 0.0%</strong>
+              <span class="alpha-sub" id="resExtraNights">+0 bookable nights</span>
+            </div>
+            <div class="alpha-metric">
+              <span class="alpha-label">Fire CapEx Payback</span>
+              <strong class="alpha-value" id="resPaybackPeriod">0.0 mos</strong>
+              <span class="alpha-sub">Time to recoup upgrade</span>
+            </div>
+          </div>
+
+          <div id="verdictBox" class="verdict-box"></div>
+
+          <div class="comparison-bars">
+            <div class="bar-group">
+              <div class="bar-header">
+                <span>180d Minpaku (Local Cap)</span>
+                <strong id="barLabelMinpaku">&yen;0 NOI</strong>
+              </div>
+              <div class="bar-track">
+                <div id="barFillMinpakuRev" class="bar-fill bar-fill-rev-amber"></div>
+                <div id="barFillMinpakuNoi" class="bar-fill bar-fill-noi-amber"></div>
+              </div>
+            </div>
+            <div class="bar-group">
+              <div class="bar-header">
+                <span>365d Ryokan-gyo (Simple Lodging)</span>
+                <strong id="barLabelRyokan">&yen;0 NOI</strong>
+              </div>
+              <div class="bar-track">
+                <div id="barFillRyokanRev" class="bar-fill bar-fill-rev-green"></div>
+                <div id="barFillRyokanNoi" class="bar-fill bar-fill-noi-green"></div>
+              </div>
+            </div>
+            <div class="bar-legend">
+              <span><i class="swatch swatch-rev"></i> Gross Revenue</span>
+              <span><i class="swatch swatch-noi"></i> Net Operating Income</span>
+            </div>
+          </div>
+
+          <div class="table-wrap flat-table-wrap">
+            <table class="ledger-table">
+              <thead>
+                <tr>
+                  <th>Line Item</th>
+                  <th>180d Minpaku</th>
+                  <th>365d Ryokan-gyo</th>
+                </tr>
+              </thead>
+              <tbody id="ledgerTableBody"></tbody>
+            </table>
+          </div>
+
+          <div class="calc-cta-row">
+            <p>
+              Verify parcel zoning eligibility with a bilingual <em>Gy&#333;seishoshi</em> before signing a purchase agreement.
+            </p>
+            <button type="button" id="btnSendCalcToDesk" class="btn-primary">
+              Attach to Zoning Check
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 3: PRE-PURCHASE ZONING CHECK DESK -->
+    <section id="zoning-desk" class="section-block">
+      <div class="section-header">
+        <h2>Pre-Purchase Parcel Zoning Check</h2>
+        <p class="section-desc">
+          Generate a bilingual inquiry sheet for licensed Administrative Scriveners (行政書士) and local STR managers.
+        </p>
+      </div>
+
+      <div class="desk-grid">
+        <form id="leadForm" class="surface-card">
+          <h3 class="sheet-heading">Property &amp; Buyer Details</h3>
+          <div class="input-grid-2">
+            <div class="input-field">
+              <label for="leadResort">Target Resort</label>
+              <select id="leadResort" required></select>
+            </div>
+            <div class="input-field">
+              <label for="leadStage">Purchase Stage</label>
+              <select id="leadStage" required>
+                <option value="Evaluating Listing (Pre-LOI)">Evaluating Listing (Pre-LOI)</option>
+                <option value="Exclusivity / Drafting PSA">Exclusivity / Drafting PSA</option>
+                <option value="Already Owned - Seeking 365d Upgrade">Already Owned - Seeking 365d Upgrade</option>
+                <option value="Multi-Asset / Fund Mandate">Multi-Asset / Fund Mandate</option>
+              </select>
+            </div>
+            <div class="input-field">
+              <label for="leadStructure">Building Type &amp; Floor Area</label>
+              <select id="leadStructure" required>
+                <option value="Detached Chalet / Villa under 200 sqm">Detached Chalet / Villa (&lt;200 sqm)</option>
+                <option value="Large Villa / Lodge 200 sqm or above (Change-of-Use)">Large Villa / Lodge (&ge;200 sqm - Change-of-Use)</option>
+                <option value="Historic Machiya / Kominka Townhouse">Historic Machiya / Kominka Townhouse</option>
+                <option value="Resort Condominium Unit (HOA Review)">Resort Condominium Unit (HOA Bylaw Review)</option>
+                <option value="Ground-Up Land Parcel Development">Ground-Up Land Parcel Development</option>
+              </select>
+            </div>
+            <div class="input-field">
+              <label for="leadBudget">Budget Range</label>
+              <select id="leadBudget" required>
+                <option value="JPY 30M - 60M (~USD 200k - 400k)">&yen;30M – &yen;60M (~$200k – $400k)</option>
+                <option value="JPY 60M - 120M (~USD 400k - 800k)" selected>&yen;60M – &yen;120M (~$400k – $800k)</option>
+                <option value="JPY 120M - 250M (~USD 800k - 1.65M)">&yen;120M – &yen;250M (~$800k – $1.65M)</option>
+                <option value="JPY 250M+ (Institutional / Trophy Chalet)">&yen;250M+ (Institutional / Trophy Chalet)</option>
+              </select>
+            </div>
+            <div class="input-field">
+              <label for="leadName">Contact Name</label>
+              <input type="text" id="leadName" required value="" />
+            </div>
+            <div class="input-field">
+              <label for="leadEmail">Email Address</label>
+              <input type="email" id="leadEmail" required value="" />
+            </div>
+          </div>
+
+          <div class="input-field full-width">
+            <label for="leadParcelNotes">Listing URL, Lot Number (Chiban / 地番), or Questions</label>
+            <textarea id="leadParcelNotes" rows="3">Requesting Urban Planning Act Yoto Chiiki verification, Hokenjo 365-day Simple Lodging pre-consultation feasibility, and Jikaho fire-alarm retrofit estimate prior to PSA signing.</textarea>
+          </div>
+
+          <fieldset class="checkbox-fieldset">
+            <legend>Requested Introductions</legend>
+            <label class="check-item">
+              <input type="checkbox" id="chkGyoseishoshi" checked />
+              <span>Licensed Bilingual <em>Gy&#333;seishoshi</em> (行政書士) — Zoning &amp; 365d Permit Filing</span>
+            </label>
+            <label class="check-item">
+              <input type="checkbox" id="chkFireVendor" checked />
+              <span>Fire Equipment Specialist (消防設備士) — <em>Jikah&#333;</em> Alarm Quote</span>
+            </label>
+            <label class="check-item">
+              <input type="checkbox" id="chkStrManager" checked />
+              <span>Local Bilingual STR Manager (24/7 <em>Kake-tsuke</em> &amp; Cleaning)</span>
+            </label>
+          </fieldset>
+
+          <div class="form-actions">
+            <button type="submit" class="btn-primary">Send Bilingual Zoning Request</button>
+            <span class="referral-disclosure">
+              No payment is collected on this site. Direct inquiry desk: <a href="mailto:chaochenxuanhua@gmail.com">chaochenxuanhua@gmail.com</a> (licensed professionals quote statutory filing fees directly).
+            </span>
+          </div>
+          <div id="leadStatusMsg" class="lead-status hidden" role="status"></div>
+        </form>
+
+        <div class="surface-card">
+          <div class="preview-header">
+            <h3 class="sheet-heading">Bilingual Consultation Sheet (事前相談シート)</h3>
+            <div class="preview-actions">
+              <button type="button" id="btnCopyBrief" class="btn-secondary">Copy Text</button>
+              <button type="button" id="btnDownloadBrief" class="btn-secondary">Download .TXT</button>
+            </div>
+          </div>
+          <pre id="bilingualBriefOutput" class="brief-code"></pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 4: CRAWLABLE 20-MARKET ZONING & YIELD DIRECTORY -->
+    <section id="market-guides" class="section-block">
+      <div class="section-header">
+        <h2>20-Market STR &amp; 365-Day Ryokan Zoning Guides</h2>
+        <p class="section-desc">
+          Dedicated municipal ordinance breakdowns, pre-computed USD/JPY yield tables, and official government citations for each jurisdiction.
+        </p>
+      </div>
+      <div class="peer-market-grid">
+        <a href="./markets/kutchan-niseko.html" class="peer-market-link">Kutchan / Niseko <span>(Hokkaido)</span></a>
+        <a href="./markets/hakuba.html" class="peer-market-link">Hakuba <span>(Nagano)</span></a>
+        <a href="./markets/kyoto-city.html" class="peer-market-link">Kyoto City <span>(Kyoto)</span></a>
+        <a href="./markets/shibuya.html" class="peer-market-link">Shibuya <span>(Tokyo)</span></a>
+        <a href="./markets/shinjuku.html" class="peer-market-link">Shinjuku <span>(Tokyo)</span></a>
+        <a href="./markets/taito-asakusa.html" class="peer-market-link">Taito / Asakusa <span>(Tokyo)</span></a>
+        <a href="./markets/chuo-osaka.html" class="peer-market-link">Chuo Osaka <span>(Osaka)</span></a>
+        <a href="./markets/atami.html" class="peer-market-link">Atami <span>(Shizuoka)</span></a>
+        <a href="./markets/hakone.html" class="peer-market-link">Hakone <span>(Kanagawa)</span></a>
+        <a href="./markets/karuizawa.html" class="peer-market-link">Karuizawa <span>(Nagano)</span></a>
+        <a href="./markets/fujikawaguchiko.html" class="peer-market-link">Fujikawaguchiko <span>(Yamanashi)</span></a>
+        <a href="./markets/furano.html" class="peer-market-link">Furano <span>(Hokkaido)</span></a>
+        <a href="./markets/nozawa-onsen.html" class="peer-market-link">Nozawa Onsen <span>(Nagano)</span></a>
+        <a href="./markets/myoko.html" class="peer-market-link">Myoko <span>(Niigata)</span></a>
+        <a href="./markets/takayama.html" class="peer-market-link">Takayama <span>(Gifu)</span></a>
+        <a href="./markets/kanazawa.html" class="peer-market-link">Kanazawa <span>(Ishikawa)</span></a>
+        <a href="./markets/fukuoka-city.html" class="peer-market-link">Fukuoka City <span>(Fukuoka)</span></a>
+        <a href="./markets/naha.html" class="peer-market-link">Naha <span>(Okinawa)</span></a>
+        <a href="./markets/ishigaki.html" class="peer-market-link">Ishigaki <span>(Okinawa)</span></a>
+        <a href="./markets/miyakojima.html" class="peer-market-link">Miyakojima <span>(Okinawa)</span></a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div>
+        <strong class="footer-brand">Japan Resort STR Atlas</strong>
+        <p class="footer-copy">
+          Compiled from Prefectural &amp; Municipal Private Lodging Act (Article 18) ordinances, Public Health Center Ryokan-gyo rules, and the MLIT Minpaku Portal.
+        </p>
+      </div>
+      <div class="footer-disclaimer">
+        <strong>Legal Disclaimer:</strong> Figures and ordinance summaries are for preliminary investment research only and do not constitute legal or tax advice. Confirm parcel-level <em>Y&#333;to Chiiki</em> boundaries, road frontage, and HOA bylaws with a licensed <em>Gy&#333;seishoshi</em> prior to purchase.
+      </div>
+    </div>
+  </footer>
+
+  <!-- ORDINANCE DETAIL MODAL -->
+  <div id="ordinanceModal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-panel">
+      <div class="modal-header">
+        <div>
+          <span id="modalCategoryBadge" class="badge"></span>
+          <h2 id="modalTitle">Resort Name</h2>
+          <p id="modalSubtitle" class="modal-sub"></p>
+        </div>
+        <button type="button" id="btnCloseModal" class="modal-close" aria-label="Close modal">&times;</button>
+      </div>
+      <div id="modalBody" class="modal-body"></div>
+      <div class="modal-footer">
+        <button type="button" id="btnModalSimulate" class="btn-primary">Simulate Yield</button>
+        <button type="button" id="btnModalZoningCheck" class="btn-secondary">Request Zoning Check</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="./data/resort_ordinances_bundle.js"></script>
+  <script src="./app.js"></script>
+</body>
+</html>
